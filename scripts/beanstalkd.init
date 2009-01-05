@@ -36,6 +36,9 @@ start() {
     if [ "${BEANSTALKD_JOB_SIZE}" != ""  ]; then
         options="${options} -z ${BEANSTALKD_JOB_SIZE}"
     fi
+    if [ "${BEANSTALKD_BINLOG_DIR}" != ""  ]; then
+        options="${options} -b ${BEANSTALKD_BINLOG_DIR}"
+    fi
     daemon $exec -d $options
     retval=$?
     echo

@@ -5,7 +5,7 @@
 
 Name:           beanstalkd
 Version:        1.2
-Release:        0%{?dist}
+Release:        1%{?dist}
 Summary:        A fast, distributed, in-memory workqueue service
 
 Group:          System Environment/Daemons
@@ -54,6 +54,8 @@ rm -rf $RPM_BUILD_ROOT
 %{_sbindir}/useradd -c "beanstalkd user" -s /bin/false -r -d %{beanstalkd_home} %{beanstalkd_user} 2>/dev/null || :
 
 %post
+mkdir %{_localstatedir}/spool/beanstalkd
+chown %{beanstalkd_user} %{_localstatedir}/spool/beanstalkd
 /sbin/chkconfig --add %{name}
 
 %preun
@@ -66,6 +68,7 @@ fi
 if [ $1 -ge 1 ]; then
     /sbin/service %{name} condrestart > /dev/null 2>&1 || :
 fi
+rm -fr %{_localstatedir}/spool/beanstalkd
 
 %files
 %defattr(-,root,root,-)
@@ -81,6 +84,7 @@ fi
 * Sun Jan 4 2009 Ask Bjørn Hansen <ask@develooper.com> - 1.2-0
 - 1.2-tobe
 - Use man page and .init/sysconfig scripts from .tar.gz
+- Binlog support
 
 * Sat Nov 22 2008 Jeremy Hinegardner <jeremy at hinegardner dot org> - 1.1-1
 - initial spec creation
